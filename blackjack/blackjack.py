@@ -1,8 +1,8 @@
 import numpy as np
 from numpy import random
+import shoe
 
 #Dictionary of Blackjack Cards
-
 cards = {'two':2,
         'three':3,
         'four':4,
@@ -20,39 +20,43 @@ cards = {'two':2,
 def CreateDeck():
     #RETURNS: deck - list of str of cards making a standard 52 card deck
     deck = list(cards.keys())*4
-    random.shuffle(deck) #inplace shuffle
+    
+    #shoe.CreateShoe() will already shuffle before placing in shoe
+#     random.shuffle(deck) #inplace shuffle
     
     return deck
 
-def CreateShoe(deck,shoe_size = 6):
+def GetHandValue(hand):
     '''
+    Gets the value of a single blackjack hand
+    
     PARAMETERS:
-    shoe_size - int of number of decks in shoe
-
+    hand - list of cards as str corresponding with cards dictionary
+    
     RETURNS:
-    tuple - list of [shoe_size * deck] cards minus random penetration
-            and
-            list of cards equal to penetration (reserve cards for dealing last hand)
+    hand_value - int in hand value (highest possible hand value if aces are present)
     '''
-
-    if shoe_size > 2:
-        pen_range = [(52/(52*shoe_size)), ((52*1.5)/(52*shoe_size))]
-    else:
-        #single and double deck penetrate from 10 to 15 cards
-        pen_range = [10/(52*shoe_size), 15/(52*shoe_size)]
-
-    #ensures that each deck added to the shoe is shuffled
-    #this might just be gamblers superstition on my part...
-    shoe = []
-    for _ in range(shoe_size):
-        random.shuffle(deck)
-        shoe += deck
+    
+    
+    hand_value = 0
+    num_aces = hand.count('ace') #gets number of aces
+    aces_value = num_aces #assumes all aces are 1's for initial calculation
+    
+    hand.sort(reverse=True) #sorts all aces to back of array
+    for card in hand[:len(hand)-num_aces]: #iterates through list without aces
+        hand_value += cards[card] #calculates hand value pre-aces
+    
+    for i in range(num_aces+1): #iterates +1 in case there is only 1 ace
+        if hand_value + ((i*11) + (num_aces-i)) <= 21: #checks combinations of 11s and 1s
+            aces_value = (i*11) + (num_aces-i) #sets combination of 11s and 1s if not a bust
+        else: #breaks out of loop once the maximum 11s:1s ratio is found
+            break
         
-    random.shuffle(shoe) #in-place shuffle
+    hand_value += aces_value
     
-    #generates penetration at a random specific card based on pen_range
-    penetration = round(len(shoe)*random.uniform(pen_range[0],pen_range[1]))
-    #generates playbale shoe with cards equal to penetration taken out
+    if hand_value > 21:
+        return -1 #-1 is read as a bust when returned
+    else:
+        return hand_value
     
-    return shoe[:-penetration],shoe[-penetration:]
-
+    
