@@ -28,7 +28,10 @@ class Shoe:
         else:
             #single and double deck penetrate from 10 to 15 cards
             pen_range = [10/(52*self._shoe_size), 15/(52*self._shoe_size)]
-
+        
+        #verbose statement
+        print(f'Shuffling {self._shoe_size} decks into shoe...')
+        
         #ensures that each deck added to the _shoe is shuffled
         #this might just be gamblers superstition on my part...
         for _ in range(self._shoe_size):
@@ -41,10 +44,16 @@ class Shoe:
         penetration = round(len(self._shoe)*random.uniform(pen_range[0],pen_range[1]))
         #generates playbale _shoe with cards equal to penetration taken out
 
+        #verbose statement
+        print('Cutting...')
         #stores playable__shoe and _reserve
         self._reserve = self._shoe[-penetration:]
         self._shoe = self._shoe[:-penetration]
     
+        #verbose statement
+        print('Burning first card...')
+        self.DrawCard()
+        print('Shoe is read to play!')
 
     def DrawCard(self):
         '''
@@ -54,8 +63,12 @@ class Shoe:
         str - card
         '''
         if len(self._shoe)>0:
+            #verbose statement
+            print('Drawing card from shoe...')
             return self._shoe.pop(0) #pops first element off of _shoe and removes from list in-place
         else:
+            #verbose statement
+            print('Shoe is now empty. Drawing from cut reserve...')
             return self._reserve.pop(0) #uses _reserve deck for last hand if _shoe is empty
         
         
