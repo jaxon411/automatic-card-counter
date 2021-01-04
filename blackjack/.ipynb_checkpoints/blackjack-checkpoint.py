@@ -42,11 +42,11 @@ def GetHandValue(hand):
     num_aces = hand.count('ace') #gets number of aces
     aces_value = num_aces #assumes all aces are 1's for initial calculation
     
-    hand.sort(reverse=True) #sorts all aces to back of array
-    for card in hand[:len(hand)-num_aces]: #iterates through list without aces
+    hand.sort() #sorts all aces to back of array
+    for card in hand[num_aces:]: #iterates through list without aces
         hand_value += cards[card] #calculates hand value pre-aces
     
-    if 'aces' in hand:
+    if 'ace' in hand:
         for i in range(num_aces+1): #iterates +1 in case there is only 1 ace
             if hand_value + ((i*11) + (num_aces-i)) <= 21: #checks combinations of 11s and 1s
                 aces_value = (i*11) + (num_aces-i) #sets combination of 11s and 1s if not a bust
