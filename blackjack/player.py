@@ -12,9 +12,9 @@ class Player:
     def AddHand(self,cards,bet=0):
         
         self.hands.append({'cards':cards,
-                           'shown_value':blackjack.GetHandValue([cards[0]]), #for dealers only
+                           'shown_value':blackjack.GetHandValue([cards[0]],count_card=False), #for dealers only
                           'value':blackjack.GetHandValue(cards),
-                          'bet':0})
+                          'bet':bet})
         
     def GetHands(self):
         '''

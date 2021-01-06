@@ -37,7 +37,6 @@ def GetHandValue(hand):
     hand_value - int in hand value (highest possible hand value if aces are present)
     '''
     
-    
     hand_value = 0
     num_aces = hand.count('ace') #gets number of aces
     aces_value = num_aces #assumes all aces are 1's for initial calculation

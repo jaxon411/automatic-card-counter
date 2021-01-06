@@ -55,20 +55,31 @@ class Shoe:
         self.DrawCard()
         print('Shoe is read to play!')
 
-    def DrawCard(self):
+    def DrawCard(self,count_card=False):
         '''
         takes first element off of self._shoe and returns it as a str
+        PARAMETERS:
+        count_card - bool flag to hide dealer's down card from the count before it's shown
         
         RETURNS:
         str - card
         '''
         if len(self._shoe)>0:
             #verbose statement
-            print('Drawing card from shoe...')
-            return self._shoe.pop(0) #pops first element off of _shoe and removes from list in-place
+#             print('Drawing card from shoe...')
+            card = self._shoe.pop(0) #pops first element off of _shoe and removes from list in-place
+    #     if count_card:
+    #         #count card
+    #         pass
+    
+            return card
         else:
             #verbose statement
             print('Shoe is now empty. Drawing from cut reserve...')
-            return self._reserve.pop(0) #uses _reserve deck for last hand if _shoe is empty
+            card = self._shoe.pop(0) #pops first element off of _shoe and removes from list in-place
+    #     if count_card:
+    #         #count card
+    #         pass
+            return card
         
         
