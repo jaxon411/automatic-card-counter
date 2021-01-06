@@ -3,12 +3,13 @@ from numpy import random
 
 class Shoe:
     
-    def __init__(self,shoe_size=6):
+    def __init__(self,verbose=False,shoe_size=6):
         
         #initializes _shoe with emty _shoe and _reserve variables
         self._shoe_size = shoe_size
         self._shoe = []
         self._reserve = []
+        self._verbose = verbose
         
     def CreateShoe(self,deck):
         '''
@@ -30,7 +31,8 @@ class Shoe:
             pen_range = [10/(52*self._shoe_size), 15/(52*self._shoe_size)]
         
         #verbose statement
-        print(f'Shuffling {self._shoe_size} decks into shoe...')
+        if self._verbose:
+            print(f'Shuffling {self._shoe_size} decks into shoe...')
         
         #ensures that each deck added to the _shoe is shuffled
         #this might just be gamblers superstition on my part...
@@ -45,15 +47,17 @@ class Shoe:
         #generates playbale _shoe with cards equal to penetration taken out
 
         #verbose statement
-        print('Cutting...')
+        if self._verbose:
+            print('Cutting...')
         #stores playable__shoe and _reserve
         self._reserve = self._shoe[-penetration:]
         self._shoe = self._shoe[:-penetration]
-    
+        
+        self.DrawCard() #burn fisrt card
         #verbose statement
-        print('Burning first card...')
-        self.DrawCard()
-        print('Shoe is read to play!')
+        if self._verbose:
+            print('Burning first card...')
+            print('Shoe is read to play!')
 
     def DrawCard(self,count_card=False):
         '''
@@ -66,7 +70,8 @@ class Shoe:
         '''
         if len(self._shoe)>0:
             #verbose statement
-#             print('Drawing card from shoe...')
+            if self._verbose:
+                print('Drawing card from shoe...')
             card = self._shoe.pop(0) #pops first element off of _shoe and removes from list in-place
     #     if count_card:
     #         #count card
@@ -75,8 +80,9 @@ class Shoe:
             return card
         else:
             #verbose statement
-            print('Shoe is now empty. Drawing from cut reserve...')
-            card = self._shoe.pop(0) #pops first element off of _shoe and removes from list in-place
+            if self._verbose:
+                print('Shoe is now empty. Drawing from cut reserve...')
+            card = self._reserve.pop(0) #pops first element off of _reserve and removes from list in-place
     #     if count_card:
     #         #count card
     #         pass
