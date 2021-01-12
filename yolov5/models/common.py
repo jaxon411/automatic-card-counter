@@ -1,15 +1,18 @@
 # This file contains modules common to various models
 
 import math
+import random
+
 import numpy as np
 import requests
 import torch
 import torch.nn as nn
 from PIL import Image, ImageDraw
+import cv2
 
 from utils.datasets import letterbox
 from utils.general import non_max_suppression, make_divisible, scale_coords, xyxy2xywh
-from utils.plots import color_list
+from utils.plots import color_list,plot_one_box
 
 
 def autopad(k, p=None):  # kernel, padding
@@ -240,28 +243,49 @@ class Detections:
         self.xywhn = [x / g for x, g in zip(self.xywh, gn)]  # xywh normalized
         self.n = len(self.pred)
 
-    def display(self, pprint=False, show=False, save=False):
-        colors = color_list()
+    def display(self, pprint=False, show=False, save=False, render=False):
+        random.seed(43) #so that the colors match
+        names = ['king','nine','back','two','eight','four','five','six','ten','jack','ace','three','queen','seven']
+        colors = [[random.randint(0, 255) for _ in range(3)] for _ in names]
+        
         for i, (img, pred) in enumerate(zip(self.imgs, self.pred)):
             str = f'Image {i + 1}/{len(self.pred)}: {img.shape[0]}x{img.shape[1]} '
             if pred is not None:
                 for c in pred[:, -1].unique():
                     n = (pred[:, -1] == c).sum()  # detections per class
                     str += f'{n} {self.names[int(c)]}s, '  # add to string
-                if show or save:
-                    img = Image.fromarray(img.astype(np.uint8)) if isinstance(img, np.ndarray) else img  # from np
+                if show or save or render:
+#                     img = Image.fromarray(img.astype(np.uint8)) if isinstance(img, np.ndarray) else img  # from np
                     for *box, conf, cls in pred:  # xyxy, confidence, class
                         # str += '%s %.2f, ' % (names[int(cls)], conf)  # label
-                        ImageDraw.Draw(img).rectangle(box, width=4, outline=colors[int(cls) % 10])  # plot
+#                         ImageDraw.Draw(img).rectangle(box, width=4, outline=colors[int(cls) % 10])  # plot
+                        plot_one_box(box,img,color=colors[int(cls)],label=self.names[int(cls)],line_thickness=3)
+                    
+                        
+            if pprint:
+                print(str)
+            if show:
+                img.show(f'Image {i}')  # show
             if save:
                 f = f'results{i}.jpg'
                 str += f"saved to '{f}'"
                 img.save(f)  # save
-            if show:
-                img.show(f'Image {i}')  # show
-            if pprint:
-                print(str)
+            if render:
+                self.imgs[i] = np.asarray(img)
 
+#     def plot_one_box(x, img, color=None, label=None, line_thickness=None):
+#                         # Plots one bounding box on image img
+#                         tl = line_thickness or round(0.002 * (img.shape[0] + img.shape[1]) / 2) + 1  # line/font thickness
+#                         color = color or [random.randint(0, 255) for _ in range(3)]
+#                         c1, c2 = (int(x[0]), int(x[1])), (int(x[2]), int(x[3]))
+#                         cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
+#                         if label:
+#                             tf = max(tl - 1, 1)  # font thickness
+#                             t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
+#                             c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
+#                             cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
+#                             cv2.putText(img, label, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
+                            
     def print(self):
         self.display(pprint=True)  # print results
 
@@ -270,6 +294,10 @@ class Detections:
 
     def save(self):
         self.display(save=True)  # save results
+
+    def render(self):
+        self.display(render=True)  # render results
+        return self.imgs
 
     def __len__(self):
         return self.n
