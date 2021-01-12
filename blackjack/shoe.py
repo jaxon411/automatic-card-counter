@@ -10,6 +10,7 @@ class Shoe:
         self._shoe = []
         self._reserve = []
         self._verbose = verbose
+        self._emergency_reserve = []
         
     def CreateShoe(self,deck):
         '''
@@ -41,7 +42,11 @@ class Shoe:
             self._shoe += deck
 
         random.shuffle(self._shoe) #in-place shuffle
-
+        
+        #random deck of emergency cards in case self._reserve is empty
+        self._emergency_reserve = deck.copy()
+        random.shuffle(self._emergency_reserve)
+        
         #generates penetration at a random specific card based on pen_range
         penetration = round(len(self._shoe)*random.uniform(pen_range[0],pen_range[1]))
         #generates playbale _shoe with cards equal to penetration taken out
@@ -59,7 +64,7 @@ class Shoe:
             print('Burning first card...')
             print('Shoe is read to play!')
 
-    def DrawCard(self,count_card=False):
+    def DrawCard(self,thecount=None,count_card=False):
         '''
         takes first element off of self._shoe and returns it as a str
         PARAMETERS:
@@ -72,20 +77,20 @@ class Shoe:
             #verbose statement
             if self._verbose:
                 print('Drawing card from shoe...')
-            card = self._shoe.pop(0) #pops first element off of _shoe and removes from list in-place
-    #     if count_card:
-    #         #count card
-    #         pass
-    
-            return card
-        else:
+            card = self._shoe.pop(0) #pops first element off of _shoe and removes from list in-place    
+        elif len(self._reserve)>0:
             #verbose statement
             if self._verbose:
                 print('Shoe is now empty. Drawing from cut reserve...')
             card = self._reserve.pop(0) #pops first element off of _reserve and removes from list in-place
-    #     if count_card:
-    #         #count card
-    #         pass
-            return card
+        else:
+            if self._verbose:
+                print('EMERGENCY RESERVE DRAW')
+            card = self._emergency_reserve.pop(0) #pops first element off of _reserve and removes from list in-place 
+        
+        if count_card:
+            thecount.UpdateCount(card)
+    
+        return card
         
         
