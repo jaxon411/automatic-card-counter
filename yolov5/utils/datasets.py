@@ -274,6 +274,8 @@ class LoadStreams:  # multiple IP or RTSP cameras
             print('%g/%g: %s... ' % (i + 1, n, s), end='')
             cap = cv2.VideoCapture(eval(s) if s.isnumeric() else s)
             assert cap.isOpened(), 'Failed to open %s' % s
+            cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1024) #set video resolution width
+            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 576) #set video resolution height
             w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
             h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
             fps = cap.get(cv2.CAP_PROP_FPS) % 100

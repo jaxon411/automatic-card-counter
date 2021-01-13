@@ -5,15 +5,21 @@ from pathlib import Path
 import cv2
 import torch
 import torch.backends.cudnn as cudnn
+import numpy as np
 from numpy import random
 
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
+from utils.datasets import LoadStreams as LoadStreams2
 from utils.general import check_img_size, check_requirements, non_max_suppression, apply_classifier, scale_coords, \
     xyxy2xywh, strip_optimizer, set_logging, increment_path
 from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized
 
+from collections import Counter
+from utils.plots import plot_blackjack
+from utils.blackjack import cardcounting
+from utils.blackjack import blackjack
 
 def detect(save_img=False):
     source, weights, view_img, save_txt, imgsz = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size
@@ -35,6 +41,9 @@ def detect(save_img=False):
     if half:
         model.half()  # to FP16
 
+    #Load card counter object
+    counter = cardcounting.TheCount(shoesize=2)
+        
     # Second-stage classifier
     classify = False
     if classify:
@@ -46,7 +55,7 @@ def detect(save_img=False):
     if webcam:
         view_img = True
         cudnn.benchmark = True  # set True to speed up constant image size inference
-        dataset = LoadStreams(source, img_size=imgsz)
+        dataset = LoadStreams2(source, img_size=imgsz)
     else:
         save_img = True
         dataset = LoadImages(source, img_size=imgsz)
@@ -57,6 +66,15 @@ def detect(save_img=False):
 
     # Run inference
     t0 = time.time()
+    
+    #########
+    #counting variables
+    #timer for counting
+    timer=time.time()
+    newlst = []
+    countedlst = []
+    #########
+    
     img = torch.zeros((1, 3, imgsz, imgsz), device=device)  # init img
     _ = model(img.half() if half else img) if device.type != 'cpu' else None  # run once
     for path, img, im0s, vid_cap in dataset:
@@ -85,6 +103,31 @@ def detect(save_img=False):
             else:
                 p, s, im0, frame = path, '', im0s, getattr(dataset, 'frame', 0)
 
+                
+                #automatic counting pseduo code
+        #     oldlst = 0 #length of lists
+        #     newlst = 0
+        #     timer = 0
+
+        #     if predictions != newlst:
+        #         timer=0
+        #         newlst=predictions
+
+        #     if newlst == 0: #if newlst length is 0, table is empty, new hand
+        #         oldlst = 0
+        #     elif newlst>oldlst:
+        #         if timer>1.5sec:
+        #             numcards = newlst - oldlst #number of new cards to count
+        #             oldlst = newlst.copy()
+        #             for card in newlst[-numcards:]:
+        #                 updatecount(card)
+        #         else:
+        #             timer+1
+
+            cpupred = np.array(pred.copy()[0].cpu())
+            cpupred = [row[-1] for row in cpupred] #gets predicted class numbers
+            
+            
             p = Path(p)  # to Path
             save_path = str(save_dir / p.name)  # img.jpg
             txt_path = str(save_dir / 'labels' / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # img.txt
@@ -94,6 +137,19 @@ def detect(save_img=False):
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(img.shape[2:], det[:, :4], im0.shape).round()
 
+                if sorted(cpupred) != sorted(newlst):
+                    timer = time.time()
+                    newlst=cpupred.copy()
+                
+                if len(sorted(newlst))>len(sorted(countedlst)):
+                    if time.time()-timer>1: #if timer > 1 second
+                        #gets the difference of the arrays including duplicates
+                        cards = list((Counter(newlst) - Counter(countedlst)).elements())
+                        countedlst = newlst.copy()
+                        for card in cards:
+                            if card != 2:
+                                counter.UpdateCount(names[int(card)])
+                
                 # Print results
                 for c in det[:, -1].unique():
                     n = (det[:, -1] == c).sum()  # detections per class
@@ -109,13 +165,24 @@ def detect(save_img=False):
 
                     if save_img or view_img:  # Add bbox to image
                         label = f'{names[int(cls)]} {conf:.2f}'
+                        
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
-
+            else:
+                #if there have been no detections for > second, reset countedlst
+                if time.time()-timer > 1: #if timer > 1 second
+                    countedlst = []
+                    timer = time.time()
+            
+            plot_blackjack(im0,count=counter.true_count,dealer=6,player=20) #plot blackjack info box
+            #moves copy of pred to cpu to preform numpy calculations on
+            
+            print("Count = "+str(counter.true_count))
             # Print time (inference + NMS)
-            print(f'{s}Done. ({t2 - t1:.3f}s)')
+            print(f'{s}Done. ({t2 - t1:.3f}s) + Inference+NMS')
 
             # Stream results
             if view_img:
+#                 print(im0)
                 cv2.imshow(str(p), im0)
 
             # Save results (image with detections)
@@ -133,15 +200,16 @@ def detect(save_img=False):
                         w = int(vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
                         h = int(vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
                         vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*fourcc), fps, (w, h))
+                    print('test')
                     vid_writer.write(im0)
 
     if save_txt or save_img:
         s = f"\n{len(list(save_dir.glob('labels/*.txt')))} labels saved to {save_dir / 'labels'}" if save_txt else ''
         print(f"Results saved to {save_dir}{s}")
 
-    print(f'Done. ({time.time() - t0:.3f}s)')
+    print(f'Done. ({time.time() - t0:.3f}s) OTHER')
 
-
+    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default='yolov5s.pt', help='model.pt path(s)')
