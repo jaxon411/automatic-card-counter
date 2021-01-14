@@ -69,6 +69,7 @@ Since players know **exactly** what play pattern the Dealer must follow before a
 <br />
 This is called **Basic Strategy**, and players have translated these probabilities into convenient charts that we can use to play.
 <br />
+<br />
 ![image](https://i.imgur.com/zclr6WN.jpg)
 <br />
 *Note: "DAS" mentioned in the Key stands for Double After Split*
