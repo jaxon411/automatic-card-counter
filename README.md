@@ -60,4 +60,15 @@ Unlike the plyaers, the Dealer does not get to decide what to do with their hand
 - If any players have a hand closer to 21 than the dealer (without Busting) they win.
 - If the Dealer busts, every player who did not Bust on their turn wins.
 
+Play then resets with new bets from the player(s).
 
+### ♦ Basic Strategy ♦
+
+Since players know **exactly** what play pattern the Dealer must follow before any hand is actually played, we're able to calculate the probability of winning based on the players hand and the dealers hand. Then, we can find the mathmatically optimal actions the player should take during their turn given those hand values.
+<br />
+<br />
+This is called **Basic Strategy**, and players have translated these probabilities into convenient charts that we can use to play.
+<br />
+![image](https://i.imgur.com/zclr6WN.jpg)
+<br />
+*Note: "DAS" mentioned in the Key stands for Double After Split*
