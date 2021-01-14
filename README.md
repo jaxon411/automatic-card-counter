@@ -51,7 +51,6 @@ In my repository, you can find a fully functional Blackjack game in the `automat
 - Run `blackjack.PlayBlackjack(bankroll=500,betsize=5)`
   - `bankroll` is your starting pool of chips/dollars/units, and `betsize` determines what you bet for each hand.
 <br />
-<br />
 There is also an autmated version of blackjack found in the same `blackjack.py` script. You can have the computer play blackjack with basic strategy or card counting and return various values.
 <br />
 <br />
