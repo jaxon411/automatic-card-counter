@@ -103,3 +103,25 @@ This is the system I programmed into this repo.
 https://www.888casino.com/blog/blackjack-strategy-guide/basic-blackjack-strategy<br />
 https://www.vegas-aces.com/site/articles/card-counting-101.html
 ## ♦ My Blackjack Program ♦
+In my repository, you can find a fully functional Blackjack game in the `automatic-card-counter/blackjack` folder. To use it, follow these instructions:
+<br />
+<br />
+- In a Ipython terminal, navigate to `automatic-card-counter/blackjack`.
+- Run `blackjack.PlayBlackjack(bankroll=500,betsize=5)`
+<br />
+<br />
+`bankroll` is your starting pool of chips/dollars/units, and `betsize` determines what you bet for each hand.
+<br />
+<br />
+There is also an autmated version of blackjack found in the same `blackjack.py` script. You can have the computer play blackjack with basic strategy or card counting and return various values.
+<br />
+<br />
+- In an Ipython terminal, navigate to `automatic-card-counter/blackjack`.
+- Run `blackjack.AutomatedBlackjack(nhands=2500,shoesize=2,counting=False,even_money=True,bankroll=10_000,betsize=13)`
+- This will return 4 values: 
+  - final_bankroll = float of the final bankroll the player has
+  - bank_history = a numpy array of the players bankroll every hand
+  - WL_history = a numpy array record of the win-loss for every hand (1=win, 0=loss)
+  - bj_history = a numpy array record of player blackjacks for every hand (1=blackjack, 0=not blackjack)
+- So it would be useful to set those to variables with something like <br />
+`final_bankroll,bank_history,WL_history,blackjacks_history = blackjack.AutomatedBlackjack(nhands=2500,shoesize=2,counting=False,even_money=True,bankroll=10_000,betsize=13)`
