@@ -107,3 +107,34 @@ I trained for 500 epocs, and saw a validation accuracy of 94%. To us my model, y
      - `source 0` indicates a webcam on your computer. If you have multiple webcams, incrementing the source number will use different webcams 
    - There will be no video exports, 
    - Again, you can use the same parameters listed above.
+## ♦ Citations ♦
+![image](https://i.imgur.com/f1rWEFt.png)
+<br />
+<br />
+Resources I used to learn about Blackjack and card counting:<br />
+Blackjack 101<br />
+https://www.888casino.com/blog/blackjack-strategy-guide/basic-blackjack-strategy
+<br />
+<br />
+Blackjack Basic Strategy<br />
+https://www.blackjackonline.com/wp-content/uploads/2020/01/bj-strategy-double-deck-hits-soft17-min.png
+<br />
+<br />
+Card Counting 101<br />
+https://www.vegas-aces.com/site/articles/card-counting-101.html
+<br />
+<br />
+Card Counting Betting Spread Guide<br />
+https://www.instructables.com/Card-Counting-and-Ranging-Bet-Sizes/
+<br />
+<br />
+<br />
+Utah State University paper on card counting:<br />
+*The Expected Value of an Advantage Blackjack Player*<br />
+https://digitalcommons.usu.edu/cgi/viewcontent.cgi?article=1528&context=gradreports
+<br />
+<br />
+<br />
+YOLOv5 github:<br />
+Github<br />
+https://github.com/ultralytics/yolov5
