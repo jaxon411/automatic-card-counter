@@ -71,8 +71,16 @@ def detect(save_img=False):
     #counting variables
     #timer for counting
     timer=time.time()
+    #frames for countin
+    frames = 0
     newlst = []
     countedlst = []
+    p_hand={'cards':[],
+           'value':0}
+    d_hand={'cards':[],
+           'shown_value':0, #for dealers only
+           'value':0}
+    moves = {0:'',1:'Stand', 2:'Hit', 3:'Double', 4:'Split', 5:'Surr'}
     #########
     
     img = torch.zeros((1, 3, imgsz, imgsz), device=device)  # init img
@@ -103,30 +111,11 @@ def detect(save_img=False):
             else:
                 p, s, im0, frame = path, '', im0s, getattr(dataset, 'frame', 0)
 
-                
-                #automatic counting pseduo code
-        #     oldlst = 0 #length of lists
-        #     newlst = 0
-        #     timer = 0
-
-        #     if predictions != newlst:
-        #         timer=0
-        #         newlst=predictions
-
-        #     if newlst == 0: #if newlst length is 0, table is empty, new hand
-        #         oldlst = 0
-        #     elif newlst>oldlst:
-        #         if timer>1.5sec:
-        #             numcards = newlst - oldlst #number of new cards to count
-        #             oldlst = newlst.copy()
-        #             for card in newlst[-numcards:]:
-        #                 updatecount(card)
-        #         else:
-        #             timer+1
-
+            #moves copy of pred to cpu to preform numpy calculations on
             cpupred = np.array(pred.copy()[0].cpu())
+            cpupred_top = [row[1] for row in cpupred]
+            cpupred_bottom = [row[3] for row in cpupred]
             cpupred = [row[-1] for row in cpupred] #gets predicted class numbers
-            
             
             p = Path(p)  # to Path
             save_path = str(save_dir / p.name)  # img.jpg
@@ -137,18 +126,49 @@ def detect(save_img=False):
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(img.shape[2:], det[:, :4], im0.shape).round()
 
+                ###########
+                #card counting update logic
                 if sorted(cpupred) != sorted(newlst):
-                    timer = time.time()
+                    timer = time.time() #check time if its live video
+                    frames = 0 #check frames if it's video file
                     newlst=cpupred.copy()
                 
-                if len(sorted(newlst))>len(sorted(countedlst)):
-                    if time.time()-timer>1: #if timer > 1 second
+                if sorted(newlst)!=sorted(countedlst):
+                    if time.time()-timer>1 or frames >= 8: #if timer > 1 second or 8+ frames have passed (8 ended up feeling the best)
                         #gets the difference of the arrays including duplicates
                         cards = list((Counter(newlst) - Counter(countedlst)).elements())
                         countedlst = newlst.copy()
-                        for card in cards:
+                        timer = time.time()
+                        frames = 0 #check frames if it's video file
+                        d_cards = []
+                        p_cards = []
+                        for i,card in enumerate(countedlst):
+                            if card != 2:
+                                if ((cpupred_bottom[i]-cpupred_top[i])/2)+cpupred_bottom[i] > 288: #Dealer side of table
+                                    d_cards.append(names[int(card)])
+                                    if len(d_cards) == 1:
+                                        d_hand['shown_value'] = blackjack.GetHandValue(d_cards)
+                                elif ((cpupred_bottom[i]-cpupred_top[i])/2)+cpupred_bottom[i] <= 288: #Player side of table
+                                    p_cards.append(names[int(card)])
+                        
+                        for i,card in enumerate(cards):
                             if card != 2:
                                 counter.UpdateCount(names[int(card)])
+                                
+#                                 if ((cpupred_bottom[i]-cpupred_top[i])/2)+cpupred_bottom[i] > 288: #Dealer side of table
+#                                 if cpupred_bottom[i] > 288:   
+#                                     d_hand['cards'].append(names[int(card)])
+
+# #                                 elif ((cpupred_bottom[i]-cpupred_top[i])/2)+cpupred_bottom[i] <= 288: #Player side of table
+#                                 elif cpupred_bottom[i] <= 288:
+#                                     p_hand['cards'].append(names[int(card)])
+                                
+#                         d_hand['shown_value']=blackjack.GetHandValue(d_hand['cards'][0])
+                        d_hand['cards'] = d_cards
+                        p_hand['cards'] = p_cards
+                        d_hand['value']=blackjack.GetHandValue(d_hand['cards'])
+                        p_hand['value']=blackjack.GetHandValue(p_hand['cards'])
+                ###########
                 
                 # Print results
                 for c in det[:, -1].unique():
@@ -169,14 +189,27 @@ def detect(save_img=False):
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
             else:
                 #if there have been no detections for > second, reset countedlst
-                if time.time()-timer > 1: #if timer > 1 second
+                if time.time()-timer > 1 or frames >= 8: #if timer > 1 second or 8+ frames have passed (8 ended up feeling the best)
                     countedlst = []
+                    p_hand={'cards':[],
+                           'value':0}
+                    d_hand={'cards':[],
+                           'shown_value':0, #for dealers only
+                           'value':0}
                     timer = time.time()
+                    frames = 0
             
-            plot_blackjack(im0,count=counter.true_count,dealer=6,player=20) #plot blackjack info box
-            #moves copy of pred to cpu to preform numpy calculations on
+            if len(p_hand['cards']) == 2 and len(d_hand['cards']) == 1:
+                move = blackjack.GetInput(p_hand,d_hand,maxsplit=False,count_obj=counter,counting=True)
+            else:
+                move = 0
+            #always plot blackjack info box
+            plot_blackjack(im0,count=counter.true_count,dealer=d_hand['value'],player=p_hand['value'],move=moves[move]) 
             
-            print("Count = "+str(counter.true_count))
+            #print info for debugging
+#             print("Count = "+str(counter.true_count))
+#             print(pred)
+    
             # Print time (inference + NMS)
             print(f'{s}Done. ({t2 - t1:.3f}s) + Inference+NMS')
 
@@ -200,7 +233,8 @@ def detect(save_img=False):
                         w = int(vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
                         h = int(vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
                         vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*fourcc), fps, (w, h))
-                    print('test')
+                    if frames < 50: #caps frame count at 50 to prevent overflow
+                        frames += 1
                     vid_writer.write(im0)
 
     if save_txt or save_img:

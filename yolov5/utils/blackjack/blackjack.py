@@ -362,7 +362,7 @@ def GetInput(p_hand,d_hand,maxsplit,count_obj=None,counting=False):
                 if d_hand['shown_value'] == 9 and count_obj.true_count >= 4:
                     return 5
                 elif d_hand['shown_value'] == 10 or d_hand['shown_value'] == 11:
-                    return 5
+                    return 1 ####################################################################################
                 elif d_hand['shown_value'] == 8 and count_obj.true_count >= 4:
                     return 5
                 elif d_hand['shown_value'] == 9 and count_obj.true_count <= -1:

@@ -68,11 +68,13 @@ def plot_one_box(x, img, color=None, label=None, line_thickness=None):
         cv2.putText(img, label, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
 
 
-def plot_blackjack(img,count,dealer,player):
+def plot_blackjack(img,count,dealer,player,move):
+    #plots blackjack info corner boxes
     c = f'Count: {count}'
     d = f'Dealer: {dealer}'
     p = f'Player: {player}'
-    xy,wh =(0,480),(200,576) 
+    move = f'{move}'
+    xy,wh =(0,450),(200,576) 
     box_color = [130,65,245] #magenta
     if int(count)<0:
         count_color = [0,0,175] #red
@@ -85,7 +87,8 @@ def plot_blackjack(img,count,dealer,player):
     cv2.putText(img, c, (xy[0], xy[1] + 25), 0, 1, count_color, thickness=2, lineType=cv2.LINE_AA)
     cv2.putText(img, d, (xy[0], xy[1] + 55), 0, 1, [225, 255, 255], thickness=2, lineType=cv2.LINE_AA)
     cv2.putText(img, p, (xy[0], xy[1] + 85), 0, 1, [225, 255, 255], thickness=2, lineType=cv2.LINE_AA)
-
+    cv2.putText(img, move, (xy[0], xy[1] + 115), 0, 1, [225, 255, 255], thickness=2, lineType=cv2.LINE_AA)
+    
 def plot_wh_methods():  # from utils.plots import *; plot_wh_methods()
     # Compares the two methods for width-height anchor multiplication
     # https://github.com/ultralytics/yolov3/issues/168

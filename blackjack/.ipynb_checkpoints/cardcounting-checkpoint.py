@@ -25,6 +25,12 @@ class TheCount:
         return penetration
     
     def UpdateCount(self,card):
+        '''
+        Updates the count using basic Hi-Lo system
+        
+        PARAMETERS
+        card = str; card's name as a string
+        '''
         if card in self.lo:
             self.running_count += 1
         elif card in self.hi:

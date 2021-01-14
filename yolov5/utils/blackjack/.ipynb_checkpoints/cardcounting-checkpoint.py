@@ -31,13 +31,6 @@ class TheCount:
             self.running_count -= 1
 
         decks_left = round(((52*self.shoesize)-self.penetration)/52,1)
-        print('DECKS LEFT: '+str(decks_left))
-        print('DECKS LEFT: '+str(decks_left))
-        print('DECKS LEFT: '+str(decks_left))
-        print('DECKS LEFT: '+str(decks_left))
-        print('DECKS LEFT: '+str(decks_left))
-        print('DECKS LEFT: '+str(decks_left))
-        print('DECKS LEFT: '+str(decks_left))
         self.true_count = round(self.running_count/decks_left,1)
      
     def ResetCount(self):

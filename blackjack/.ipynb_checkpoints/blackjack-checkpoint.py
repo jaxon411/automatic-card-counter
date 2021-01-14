@@ -61,7 +61,7 @@ def GetHandValue(hand):
     
 def CheckAces(hand):
     '''
-    Checks if aces are usable as 11s or if they must all be 1s
+    Checks if any aces in a hand usable as 11s or must be 1s
     
     PARAMETERS:
     hand - list of cards as str corresponding with cards dictionary
@@ -194,6 +194,8 @@ def HandActionAutomated(shoe_obj,current_player,count_obj=None,counting=False,d_
     shoe_obj = current shoe being drawn from
     current_player = Player object of current player containing hand(s) and bankroll
     d_hand = dictionary of dealers hand (only needed for automated blackjack)
+    count_obj = TheCount object for card counting
+    counting = bool; True if card counting
     '''
     
     maxsplit = False #bool to check if maximum splits are reached so this doesn't loop forever
@@ -242,7 +244,8 @@ def HandActionAutomated(shoe_obj,current_player,count_obj=None,counting=False,d_
                         
                     else:
                         #splits hand into two hands, but WON'T interate to the next one until splitting = False
-                        current_player.AddHand([hand['cards'][0],shoe_obj.DrawCard(count_obj,counting)],hand['bet']) #adding the hand['bet'] effectively doubles the bet
+                        #adding the hand['bet'] is required for an additional hand to be played
+                        current_player.AddHand([hand['cards'][0],shoe_obj.DrawCard(count_obj,counting)],hand['bet']) 
                         hand['cards'] = [hand['cards'][1]] #since only ['cards'] and ['value'] gets edited in the original hand, ['bet'] is retained
                         current_player.AddCard(hand,shoe_obj.DrawCard(count_obj,counting))
 
@@ -274,6 +277,9 @@ def GetInput(p_hand,d_hand,maxsplit,count_obj=None,counting=False):
     PARAMETERS:
     p_hand = dictionary; players hand
     d_hand = dictionary; dealers hand
+    maxsplit = bool; True if the max number of splits have been reached for a single hand (4)
+    count_obj = TheCount object for card counting
+    counting = bool; True if card counting
     
     RETURNS:
     int corresponding to: 1=Stand, 2=Hit, 3=Double Down, 4= Split, 5=Surrender
@@ -281,9 +287,9 @@ def GetInput(p_hand,d_hand,maxsplit,count_obj=None,counting=False):
     strategy = {}
     #1=Stand, 2=Hit, 3=Double Down, 4= Split, 5=Surrender
     #The None values are to buffer indexes so that the indexes match dealer hand values
-    #i.e. 2-11 values are indexes 2-11 respectively
+    #i.e. hand value 2 trhu 11 are in the indexes of 2 thru 11
     
-        #Dealers hand:   None,None,2,3,4,5,6,7,8,9,10,A
+    #Dealers hand:       None,None,2,3,4,5,6,7,8,9,10,A
     strategy_basic = {4:[None,None,2,2,2,2,2,2,2,2,2,2],#in case of of maxsplit
             5:[None,None,2,2,2,2,2,2,2,2,2,2],
             6:[None,None,2,2,2,2,2,2,2,2,2,2],
@@ -560,9 +566,6 @@ def PlayBlackjack(bankroll,betsize=5):
         for _hand in player_obj.GetHands():
             if player_acting and _hand['value'] < 22:
                 dealer_acting = True
-                ##############################
-                #COUNT DEALERS DOWN CARD HERE
-                ##############################
             
         while dealer_acting:
             print(f"Dealers hand: {d_hand['cards']}\nDealers hand value: {d_hand['value']}")
@@ -614,7 +617,7 @@ def PlayBlackjack(bankroll,betsize=5):
         
         print(f'\nCurrent Bankroll: ${player_obj.bankroll}')
         
-        if player_obj.bankroll < betsize:
+        if player_obj.bankroll < betsize: #if the player can no longer bet, break
             print('OUT OF MONEY')
             playing = False        
         elif input('Continue playing? (y/n)') == 'n':
@@ -837,7 +840,7 @@ def AutomatedBlackjack(nhands,shoesize,bankroll,counting=False,even_money=False,
         else:
             WL_history = np.append(WL_history,0)
             
-        #considers you out of money if you can't split the maximum amount of times (4)
+        #considers you out of money if you don't have enough money to split the maximum amount of times (4)
         if counting and player_obj.bankroll < bankroll/4:
             if verbose:
                 print(f'OUT OF MONEY AFTER {i} HANDS')
@@ -852,6 +855,7 @@ def AutomatedBlackjack(nhands,shoesize,bankroll,counting=False,even_money=False,
 #             if abs(thecount.true_count) > 3:
 #                 print(f"Runnig count = {thecount.running_count}")
 #                 print(f"True count = {thecount.true_count}")
+
     if verbose:
         print("Finished!")
         print(player_obj.bankroll,len(bank_history),len(WL_history),len(bj_history))
