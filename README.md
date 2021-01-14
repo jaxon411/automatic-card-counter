@@ -69,3 +69,41 @@ There is also an autmated version of blackjack found in the same `blackjack.py` 
 `final_bankroll,bank_history,WL_history,blackjacks_history = blackjack.AutomatedBlackjack(nhands=2500,shoesize=2,counting=False,even_money=True,bankroll=10_000,betsize=13)`
 - You can also turn card counting on and off via the `coutning` variable
   - Note that card counters never take even money on Blackjack, so `even_money` will be turned to `False` automatically if `counting=True`.
+
+## ♦ Automatic Card Counting ♦
+My card detection uses a YOLOv5m model trained on about ~150 card images (found in `automatic-card-counter/imgs_raw`). More information about YOLOv5 can be found here:<br />
+https://github.com/ultralytics/yolov5
+<br />
+<br />
+I trained for 500 epocs, and saw a validation accuracy of 94%. To us my model, you can follow these steps:<br />
+1. **Video file detection**
+   - In a terminal, navigate to `automatic-card-counter/yolov5`
+   - Run `!python detect.py --weights runs/train/exp5/weights/best.pt --img 1024 --conf 0.93 --exist --source PATH/TO/VIDEOFILE.mp4
+   - The detect script will automatically output a video to `automatic-card-counter/yolov5/runs/detect/exp`
+   - If you would like to mess around with the `detect.py` parameters, here is a list of arguments I found useful:
+```
+--weights
+    default='yolov5s.pt', help='model.pt path(s)
+--source'
+    default='data/images', help='source')  # file/folder, 0 for webcam
+--img
+    default=640, help='inference size (pixels)
+--conf
+    default=0.25, help='object confidence threshold
+--iou
+    default=0.45, help='IOU threshold for NMS
+--view-img
+    help='display results')
+--save-txt
+    save results to *.txt
+--save-conf
+    save confidences in --save-txt labels
+--exist
+    existing project/name ok, do not increment directory
+   ```
+2. **Live video feed detection**
+   - In a terminal, navigate to `automatic-card-counter/yolov5`
+   - Run `!python detect.py --weights runs/train/exp5/weights/best.pt --img 1024 --conf 0.93 --exist --source 0`
+     - `source 0` indicates a webcam on your computer. If you have multiple webcams, incrementing the source number will use different webcams 
+   - There will be no video exports, 
+   - Again, you can use the same parameters listed above.
