@@ -116,6 +116,7 @@ In my repository, you can find a fully functional Blackjack game in the `automat
 There is also an autmated version of blackjack found in the same `blackjack.py` script. You can have the computer play blackjack with basic strategy or card counting and return various values.
 <br />
 <br />
+
 - In an Ipython terminal, navigate to `automatic-card-counter/blackjack`.
 - Run `blackjack.AutomatedBlackjack(nhands=2500,shoesize=2,counting=False,even_money=True,bankroll=10_000,betsize=13)`
 - This will return 4 values: 
