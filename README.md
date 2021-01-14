@@ -73,3 +73,33 @@ This is called **Basic Strategy**, and players have translated these probabiliti
 ![image](https://i.imgur.com/zclr6WN.jpg)
 <br />
 *Note: "DAS" mentioned in the Key stands for Double After Split*
+<br />
+<br />
+There is  a problem with basic stratgety, however...the Casino still has the edge. This is why, despite players using basic strategy, Casinos still make money at Blackjack tables.
+<br />
+<br />
+But there is something that players can do to tilt the game in their favor...
+
+### ♦ Card Counting ♦
+In 1962, Edward O. Thorp published his book *Beat the Dealer*, in which he outlines a strategy players can employ to give them an advantage: **Card Counting**.
+<br />
+<br />
+In it's most basic form, card counting is a stragetgy that assigns a +1, -1, or 0 value to various cards depending on how benificial they are for the player.
+<br />
+<br />
+![image](https://www.wikihow.com/images/thumb/d/d5/Win-at-Blackjack-Step-9-Version-3.jpg/v4-460px-Win-at-Blackjack-Step-9-Version-3.jpg)
+<br />
+<br />
+
+This method words because Blackjack is a dependent variable game, meaning that cards that have been drawn inform us about which cards are still left in the deck/shoe. A high count tells us that more high-value cards (Tens and Aces) are in the deck, whereas a low count tells us that more low-value cards are in the deck.
+<br />
+<br />
+As players, this doesn't make it more likely that we will win. After all, the dealer can draw those high value cards to. Instead, it informs us **how we should bet**. When the count is high, bet high. When the count is low, bet low. This means that over time, our winnings will offset our losses monetarily, even though we lose individual hands more often than we win.
+<br />
+<br />
+This is the system I programmed into this repo.
+
+> For more information on the math behind black jack and card counting, you can visit these resources:<br />
+https://www.888casino.com/blog/blackjack-strategy-guide/basic-blackjack-strategy<br />
+https://www.vegas-aces.com/site/articles/card-counting-101.html
+## ♦ My Blackjack Program ♦
