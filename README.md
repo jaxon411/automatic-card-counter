@@ -126,3 +126,5 @@ There is also an autmated version of blackjack found in the same `blackjack.py` 
   - bj_history = a numpy array record of player blackjacks for every hand (1=blackjack, 0=not blackjack)
 - So it would be useful to set those to variables with something like <br />
 `final_bankroll,bank_history,WL_history,blackjacks_history = blackjack.AutomatedBlackjack(nhands=2500,shoesize=2,counting=False,even_money=True,bankroll=10_000,betsize=13)`
+- You can also turn card counting on and off via the `coutning` variable
+  - Note that card counters never take even money on Blackjack, so `even_money` will be turned to `False` automatically if `counting=True`.
