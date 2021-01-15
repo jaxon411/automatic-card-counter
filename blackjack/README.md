@@ -20,7 +20,6 @@ Here are the values of each card in the game.
    - **Double Down** &ndash; Double your current bet and draw **one** additional card. You **must** draw one card and only one card, and you're only allowed to do this with your initial two-card hand.
    - **Split** &ndash; Only available when you have two cards of the same value. Split your hand into two separate hands and play them each (you must also match your bet with your new hand). If you continue to draw cards of the same value on your split hands, you can continue to split up to four times.
    - **Surrender** &ndash; Concede the hand, but only lose half your initial bet
-<br />
 6. Finally, once all player hands are locked in, the dealer acts.
 
 ### ♦ The Dealer ♦
