@@ -17,7 +17,7 @@ Here are the values of each card in the game.
 5. All players take their turn to act in sequential order, with the dealer acting last. Each player is allowed a set of moves on their turn:
    - **Hit** &ndash; Draw a card. You can continue to hit until you either Stand or Bust (having a hand value exceeding 21)
    - **Stand** &ndash; Stop drawing cards, you hand value is now locked in for the rest of play
-   - **Double Down** &ndash; Double your current bet and draw **one** additional card. You **must** draw one card and only one card.
+   - **Double Down** &ndash; Double your current bet and draw **one** additional card. You **must** draw one card and only one card, and you're only allowed to do this with your initial two-card hand.
    - **Split** &ndash; Only available when you have two cards of the same value. Split your hand into two separate hands and play them each (you must also match your bet with your new hand). If you continue to draw cards of the same value on your split hands, you can continue to split up to four times.
    - **Surrender** &ndash; Concede the hand, but only lose half your initial bet
 <br />
