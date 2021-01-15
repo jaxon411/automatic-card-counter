@@ -16,15 +16,6 @@ My ultimate goal was to create a playing card detection model trained to recogni
 ### Application Pipeline
 ![Image](https://i.imgur.com/lxMtN9l.png)
 
-PARAMETERS:
-bankroll = float of players current dollar count
-betsize = int of the baseline bet a player will make every hand
-
-No returns. This is a self-contained method
-that plays blackjack with while loops for user input and dealer decisions.
-'''
-#Play blackjack manually
-blackjack.PlayBlackjack(bankroll=500,betsize=5)
 
 ## ♦ Blackjack ♦
 
