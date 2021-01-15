@@ -66,7 +66,7 @@ https://github.com/ultralytics/yolov5
 I trained for 500 epocs, and saw a validation accuracy of 94%. To us my model, you can follow these steps:<br />
 1. **Video file detection**
    - In a terminal, navigate to `automatic-card-counter/yolov5`
-   - Run `!python detect.py --weights runs/train/exp5/weights/best.pt --img 1024 --conf 0.93 --exist --source PATH/TO/VIDEOFILE.mp4
+   - Run `!python detect.py --weights runs/train/exp5/weights/best.pt --img 1024 --conf 0.93 --exist --source PATH/TO/VIDEOFILE.mp4`
    - The detect script will automatically output a video to `automatic-card-counter/yolov5/runs/detect/exp`
    - If you would like to mess around with the `detect.py` parameters, here is a list of arguments I found useful:
 ```
