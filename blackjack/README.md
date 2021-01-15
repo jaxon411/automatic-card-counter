@@ -1,6 +1,6 @@
 # ♦ Blackjack ♦
 
-Before we get into how my model and scripts work, we need to first understand the game of blackjack. Blackjack is a playing card game in which the player(s) and dealer are trying to get a hand as close to 21 as possible without going over.
+Blackjack is a playing card game in which the player(s) and dealer are trying to get a hand as close to 21 as possible without going over.
 <br />
 <br />
 Here are the values of each card in the game.
