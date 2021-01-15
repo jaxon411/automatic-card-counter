@@ -63,7 +63,7 @@ My card detection uses a YOLOv5m model trained on about ~150 card images (found 
 https://github.com/ultralytics/yolov5
 <br />
 <br />
-I trained for 500 epocs, and saw a validation accuracy of 94%. To us my model, you can follow these steps:<br />
+I trained for 500 epocs, and saw a validation accuracy of 94%. To use my model, you can follow these steps:<br />
 1. **Video file detection**
    - In a terminal, navigate to `automatic-card-counter/yolov5`
    - Run `!python detect.py --weights runs/train/exp5/weights/best.pt --img 1024 --conf 0.93 --exist --source PATH/TO/VIDEOFILE.mp4`
