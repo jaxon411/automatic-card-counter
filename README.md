@@ -49,7 +49,7 @@ There is also an automated version of blackjack found in the same `blackjack.py`
 - In an Ipython terminal, navigate to `automatic-card-counter/blackjack`.
 - Run `blackjack.AutomatedBlackjack(nhands=2500,shoesize=2,counting=False,even_money=True,bankroll=10_000,betsize=13)`
 - This will return 4 values: 
-  - final_bankroll = float of the final bankroll the player has
+  - final_bankroll = float of the final bankroll the player has at the end of `nhands`
   - bank_history = a numpy array of the players bankroll every hand
   - WL_history = a numpy array record of the win-loss for every hand (1=win, 0=loss)
   - bj_history = a numpy array record of player blackjacks for every hand (1=blackjack, 0=not blackjack)
