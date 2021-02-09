@@ -13,6 +13,10 @@ Source: https://www.fritz.ai/object-detection/
 
 My ultimate goal was to create a playing card detection model trained to recognize cards on a table, count cards based on a proven card counting system, and display what the player should do given the current hand. I'm happy to report that I was successful!
 
+If you don't want to read, you can instead watch this 6 minute video I made breaking down the important parts of this projects here:
+https://youtu.be/IO55apfZ3Z4
+
+
 ### Application Pipeline
 ![Image](https://i.imgur.com/lxMtN9l.png)
 
