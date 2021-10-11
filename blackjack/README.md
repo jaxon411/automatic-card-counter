@@ -67,7 +67,7 @@ In it's most basic form, card counting is a stragetgy that assigns a +1, -1, or 
 This method words because Blackjack is a dependent variable game, meaning that cards that have been drawn inform us about which cards are still left in the deck/shoe. A high count tells us that more high-value cards (Tens and Aces) are in the deck, whereas a low count tells us that more low-value cards are in the deck.
 <br />
 <br />
-As players, this doesn't make it more likely that we will win. After all, the dealer can draw those high value cards to. Instead, it informs us **how we should bet**. When the count is high, bet high. When the count is low, bet low. This means that over time, our winnings will offset our losses monetarily, even though we lose individual hands more often than we win.
+As players, this doesn't make it more likely that we will win. After all, the dealer can draw those high value cards too. Instead, it informs us **how we should bet**. When the count is high, bet high. When the count is low, bet low. This means that over time, our winnings will offset our losses monetarily, even though we lose individual hands more often than we win.
 <br />
 <br />
 This is the system I programmed into this repo.
