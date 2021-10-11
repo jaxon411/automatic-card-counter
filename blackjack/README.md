@@ -6,7 +6,7 @@ Blackjack is a playing card game in which the player(s) and dealer are trying to
 Here are the values of each card in the game.
 <br />
 <br />
-![image](https://1502298981.rsc.cdn77.org/media/1286/backjack-card-values.jpg?width=500&height=281.25)
+![image](https://www.blackjack.org/wp-content/uploads/2021/06/Blackjack-card-values.png)
 <br />
 
 ### ♦ Player Turn Order ♦
