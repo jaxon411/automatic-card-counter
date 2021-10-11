@@ -29,7 +29,7 @@ Before we get into how my model and scripts work, we need to first understand th
 Here are the values of each card in the game.
 <br />
 <br />
-![image](https://1502298981.rsc.cdn77.org/media/1286/backjack-card-values.jpg?width=500&height=281.25)
+![image](https://www.blackjack.org/wp-content/uploads/2021/06/Blackjack-card-values.png)
 <br />
 
 For a more in depth explination about Blackjack and Card Counting rules, I've put together a document here:<br />
