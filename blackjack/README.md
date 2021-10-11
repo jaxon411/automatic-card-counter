@@ -26,10 +26,12 @@ Here are the values of each card in the game.
 Unlike the players, the Dealer does not get to decide what to do with their hand. Instead, the dealer **must** follow a specific play pattern. This play pattern, coupled with the fact that players only see one of the dealers cards during their turn, is what gives the casino it's advantage over the players. Dealer play patterns vary depending on a few factors (minimum/maxiumum bet, Blackjack payout ratio, Blackjack version being played, etc.), but generally these are the rules that govern how the Dealer plays their turn:
 
 - The dealer flips over their face-down card, revealing their hand value to the players.
-- The dealer continues to hit until either their hand has a value of 17, or they Bust.
-- Once either condition is met, the Dealer compares their hand value to the rest of the players.
+- The dealer continues to hit until their hand is equal to or greater than 17.
+- Once either condition is met, the Dealer stops taking cards, NO MATTER WHAT THE PLAYERS HAVE.
+- The dealer then compares their hand value to the rest of the players.
 - If any players have a hand closer to 21 than the dealer (without Busting) they win.
 - If the Dealer busts, every player who did not Bust on their turn wins.
+- If the Dealer is closer to 21 than any players, the house takes those players' money.
 
 Play then resets with new bets from the player(s).
 
